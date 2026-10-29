@@ -3,10 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Manual de usuario — Inventario Inteligente</title>
+<!-- FontAwesome para ícono del botón -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- html2pdf.js para exportar directamente a archivo PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
-  /* Hoja lista para "Imprimir → Guardar como PDF" */
+  /* Configuración para impresión nativa y guardado en PDF */
   @page { size: A4; margin: 2cm; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; line-height: 1.55; max-width: 800px; margin: 0 auto; padding: 24px; }
+  
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; line-height: 1.55; max-width: 800px; margin: 0 auto; padding: 24px; position: relative; }
   h1 { color: #3F51B5; border-bottom: 3px solid #3F51B5; padding-bottom: 8px; }
   h2 { color: #3F51B5; margin-top: 28px; }
   h3 { color: #444; margin-top: 18px; }
@@ -20,164 +26,224 @@
   .portada { text-align: center; margin-top: 120px; }
   .portada h1 { border: none; font-size: 2.2em; }
   .pagebreak { page-break-before: always; }
+
+  /* Estilos para el Panel del Botón Flotante */
+  .no-print {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-exportar {
+    background: linear-gradient(135deg, #3F51B5, #1A237E);
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(63, 81, 181, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-exportar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(63, 81, 181, 0.6);
+    background: linear-gradient(135deg, #303F9F, #0D47A1);
+  }
+
+  .btn-exportar:active {
+    transform: translateY(0);
+  }
+
+  /* Ocultar elementos flotantes durante la impresión */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- PORTADA -->
-<div class="portada">
-  <h1>Inventario Inteligente</h1>
-  <p><b>Manual de usuario</b></p>
-  <p>Gestión de productos, códigos de barras y QR,<br>entradas, salidas y ajustes de inventario</p>
-  <p style="margin-top:40px">Programación de Dispositivos Móviles II<br>
-  UMES — Segundo semestre 2026 — Proyecto de cierre 1</p>
+<!-- BOTÓN FLOTANTE PARA EXPORTAR PDF -->
+<div class="no-print">
+  <button class="btn-exportar" onclick="exportarPDF()">
+    <i class="fa-solid fa-file-pdf"></i> Exportar a PDF
+  </button>
 </div>
 
-<div class="pagebreak"></div>
+<!-- PORTADA -->
+<div id="contenido-pdf">
+  <div class="portada">
+    <h1>Inventario Inteligente</h1>
+    <p><b>Manual de usuario</b></p>
+    <p>Gestión de productos, códigos de barras y QR,<br>entradas, salidas y ajustes de inventario</p>
+    <p style="margin-top:40px">Programación de Dispositivos Móviles II<br>
+    UMES — Segundo semestre 2026 — Proyecto de cierre 1</p>
+  </div>
 
-<h1>1. Introducción</h1>
-<p><b>Inventario Inteligente</b> es una aplicación para teléfonos Android que permite a una pequeña tienda o bodega:</p>
-<ul>
-  <li>Registrar y consultar sus <b>productos</b> con existencias.</li>
-  <li>Generar <b>etiquetas con código de barras (Code 128) y QR</b>.</li>
-  <li><b>Escanear</b> códigos con la cámara para encontrar productos rápido.</li>
-  <li>Registrar <b>entradas, salidas y ajustes</b> de inventario.</li>
-  <li>Ver <b>alertas de stock bajo</b>, revisar el <b>historial</b> y <b>exportar a CSV</b>.</li>
-</ul>
-<p>La aplicación funciona <b>sin internet</b>: toda la información se guarda en el propio teléfono.</p>
+  <div class="pagebreak"></div>
 
-<h1>2. Instalación y permisos</h1>
-<ol>
-  <li>Instala el APK en tu teléfono (archivo <code>app-release.apk</code>).</li>
-  <li>Si Android pregunta, acepta "Instalar de origen desconocido".</li>
-  <li>Abre la app. Al primer uso verás datos de <b>demostración</b> (15 productos y 3 categorías) para practicar.</li>
-  <li><b>Permisos:</b> al usar el escáner por primera vez, la app pedirá permiso de <b>Cámara</b>. Acepta para poder escanear. Si lo niegas, aún puedes usar la <b>búsqueda manual</b>.</li>
-</ol>
-<div class="captura">[CAPTURA: pantalla de inicio con las 4 pestañas]</div>
+  <h1>1. Introducción</h1>
+  <p><b>Inventario Inteligente</b> es una aplicación para teléfonos Android que permite a una pequeña tienda o bodega:</p>
+  <ul>
+    <li>Registrar y consultar sus <b>productos</b> con existencias.</li>
+    <li>Generar <b>etiquetas con código de barras (Code 128) y QR</b>.</li>
+    <li><b>Escanear</b> códigos con la cámara para encontrar productos rápido.</li>
+    <li>Registrar <b>entradas, salidas y ajustes</b> de inventario.</li>
+    <li>Ver <b>alertas de stock bajo</b>, revisar el <b>historial</b> y <b>exportar a CSV</b>.</li>
+  </ul>
+  <p>La aplicación funciona <b>sin internet</b>: toda la información se guarda en el propio teléfono.</p>
 
-<h1>3. Pantalla de inicio</h1>
-<p>La pestaña <b>Inicio</b> muestra:</p>
-<ul>
-  <li><b>Tarjetas de resumen:</b> productos, alertas de stock bajo, movimientos y valor del inventario.</li>
-  <li><b>Accesos rápidos:</b> nuevo producto, ver productos, escanear e historial.</li>
-  <li><b>Alertas de stock bajo</b> con los productos que necesitan reabastecimiento.</li>
-  <li><b>Últimos movimientos</b> registrados.</li>
-</ul>
-<p>Toca la <b>silueta de persona</b> (arriba a la derecha) para poner tu <b>nombre como responsable</b>: aparecerá firmado en cada movimiento que registres.</p>
-<div class="captura">[CAPTURA: tarjeta de perfil con el nombre del responsable]</div>
+  <h1>2. Instalación y permisos</h1>
+  <ol>
+    <li>Instala el APK en tu teléfono (archivo <code>app-release.apk</code>).</li>
+    <li>Si Android pregunta, acepta "Instalar de origen desconocido".</li>
+    <li>Abre la app. Al primer uso verás datos de <b>demostración</b> (15 productos y 3 categorías) para practicar.</li>
+    <li><b>Permisos:</b> al usar el escáner por primera vez, la app pedirá permiso de <b>Cámara</b>. Acepta para poder escanear. Si lo niegas, aún puedes usar la <b>búsqueda manual</b>.</li>
+  </ol>
+  <div class="captura">[CAPTURA: pantalla de inicio con las 4 pestañas]</div>
 
-<h1>4. Gestión de productos</h1>
+  <h1>3. Pantalla de inicio</h1>
+  <p>La pestaña <b>Inicio</b> muestra:</p>
+  <ul>
+    <li><b>Tarjetas de resumen:</b> productos, alertas de stock bajo, movimientos y valor del inventario.</li>
+    <li><b>Accesos rápidos:</b> nuevo producto, ver productos, escanear e historial.</li>
+    <li><b>Alertas de stock bajo</b> con los productos que necesitan reabastecimiento.</li>
+    <li><b>Últimos movimientos</b> registrados.</li>
+  </ul>
+  <p>Toca la <b>silueta de persona</b> (arriba a la derecha) para poner tu <b>nombre como responsable</b>: aparecerá firmado en cada movimiento que registres.</p>
+  <div class="captura">[CAPTURA: tarjeta de perfil con el nombre del responsable]</div>
 
-<h2>4.1 Crear un producto</h2>
-<ol>
-  <li>Pestaña <b>Productos → botón Nuevo</b> (o acceso rápido en Inicio).</li>
-  <li>Completa el formulario:
-    <ul>
-      <li><b>Código único:</b> identificador que se convertirá en código de barras y QR (ej. <code>ELE-006</code>). No puede repetirse.</li>
-      <li><b>Nombre</b> (obligatorio), <b>descripción</b> y <b>categoría</b>.</li>
-      <li><b>Precio de compra</b> y <b>precio de venta</b>.</li>
-      <li><b>Stock mínimo:</b> cuando el stock llegue a este valor o menos, la app mostrará una alerta.</li>
-      <li><b>Existencias iniciales:</b> se registran automáticamente como un <b>movimiento de ENTRADA</b> para mantener la trazabilidad.</li>
-      <li><b>Foto</b> (opcional): toca el ícono de cámara para tomar una foto o elegir de la galería.</li>
-    </ul>
-  </li>
-  <li>Toca <b>Guardar</b>.</li>
-</ol>
-<div class="captura">[CAPTURA: formulario de producto completo]</div>
+  <h1>4. Gestión de productos</h1>
 
-<h2>4.2 Buscar y filtrar</h2>
-<p>En <b>Productos</b> puedes buscar por nombre, código o descripción, y usar los filtros <b>Stock bajo</b> y <b>Mostrar inactivos</b>.</p>
-<div class="captura">[CAPTURA: listado con filtro de stock bajo activo]</div>
+  <h2>4.1 Crear un producto</h2>
+  <ol>
+    <li>Pestaña <b>Productos → botón Nuevo</b> (o acceso rápido en Inicio).</li>
+    <li>Completa el formulario:
+      <ul>
+        <li><b>Código único:</b> identificador que se convertirá en código de barras y QR (ej. <code>ELE-006</code>). No puede repetirse.</li>
+        <li><b>Nombre</b> (obligatorio), <b>descripción</b> y <b>categoría</b>.</li>
+        <li><b>Precio de compra</b> y <b>precio de venta</b>.</li>
+        <li><b>Stock mínimo:</b> cuando el stock llegue a este valor o menos, la app mostrará una alerta.</li>
+        <li><b>Existencias iniciales:</b> se registran automáticamente como un <b>movimiento de ENTRADA</b> para mantener la trazabilidad.</li>
+        <li><b>Foto</b> (opcional): toca el ícono de cámara para tomar una foto o elegir de la galería.</li>
+      </ul>
+    </li>
+    <li>Toca <b>Guardar</b>.</li>
+  </ol>
+  <div class="captura">[CAPTURA: formulario de producto completo]</div>
 
-<h2>4.3 Editar</h2>
-<p>Abre el producto y toca el ícono <b>lápiz</b>. El stock actual <b>no se edita a mano</b>: se cambia únicamente con movimientos (entrada, salida o ajuste).</p>
+  <h2>4.2 Buscar y filtrar</h2>
+  <p>En <b>Productos</b> puedes buscar por nombre, código o descripción, y usar los filtros <b>Stock bajo</b> y <b>Mostrar inactivos</b>.</p>
+  <div class="captura">[CAPTURA: listado con filtro de stock bajo activo]</div>
 
-<h2>4.4 Desactivar o eliminar</h2>
-<ul>
-  <li>Toca el ícono de <b>papelera</b> en el detalle:
-    <ul>
-      <li>Si el producto <b>tiene movimientos</b>, se <b>desactiva</b> (su historial se conserva y aparece con el filtro "Mostrar inactivos").</li>
-      <li>Si <b>no tiene movimientos</b>, se elimina.</li>
-    </ul>
-  </li>
-  <li>Un producto desactivado puede <b>reactivarse</b> desde su detalle (ícono de flecha circular).</li>
-</ul>
+  <h2>4.3 Editar</h2>
+  <p>Abre el producto y toca el ícono <b>lápiz</b>. El stock actual <b>no se edita a mano</b>: se cambia únicamente con movimientos (entrada, salida o ajuste).</p>
 
-<h1>5. Etiquetas: código de barras y QR</h1>
-<p>En el <b>detalle del producto</b>, sección <b>Etiquetas</b>, verás:</p>
-<ul>
-  <li>El <b>código de barras Code 128</b> con tu código único.</li>
-  <li>El <b>código QR</b> con el mismo código.</li>
-  <li>Botones para <b>Compartir PNG</b> (imagen lista para imprimir) y <b>Compartir texto</b>.</li>
-</ul>
-<div class="captura">[CAPTURA: sección de etiquetas con ambos códigos]</div>
-<div class="nota">El código identifica al producto. Las existencias <b>no</b> están dentro del QR: se consultan siempre en la base de datos, así la etiqueta nunca queda desactualizada.</div>
+  <h2>4.4 Desactivar o eliminar</h2>
+  <ul>
+    <li>Toca el ícono de <b>papelera</b> en el detalle:
+      <ul>
+        <li>Si el producto <b>tiene movimientos</b>, se <b>desactiva</b> (su historial se conserva y aparece con el filtro "Mostrar inactivos").</li>
+        <li>Si <b>no tiene movimientos</b>, se elimina.</li>
+      </ul>
+    </li>
+    <li>Un producto desactivado puede <b>reactivarse</b> desde su detalle (ícono de flecha circular).</li>
+  </ul>
 
-<h1>6. Escanear códigos</h1>
-<ol>
-  <li>Pestaña <b>Escáner</b> y apunta la cámara al código de barras o QR.</li>
-  <li>Al reconocer el código:
-    <ul>
-      <li>Si el producto <b>existe</b>: se abre su ficha con existencias y botones de entrada/salida/ajuste.</li>
-      <li>Si <b>no existe</b>: la app avisa "Producto no registrado" y ofrece <b>crear el producto</b> con el código ya escrito.</li>
-    </ul>
-  </li>
-  <li><b>Búsqueda manual:</b> si no puedes usar la cámara, escribe el código o el nombre en el campo inferior y toca la flecha.</li>
-</ol>
-<div class="captura">[CAPTURA: escáner con marco guía]</div>
+  <h1>5. Etiquetas: código de barras y QR</h1>
+  <p>En el <b>detalle del producto</b>, sección <b>Etiquetas</b>, verás:</p>
+  <ul>
+    <li>El <b>código de barras Code 128</b> con tu código único.</li>
+    <li>El <b>código QR</b> con el mismo código.</li>
+    <li>Botones para <b>Compartir PNG</b> (imagen lista para imprimir) y <b>Compartir texto</b>.</li>
+  </ul>
+  <div class="captura">[CAPTURA: sección de etiquetas con ambos códigos]</div>
+  <div class="nota">El código identifica al producto. Las existencias <b>no</b> están dentro del QR: se consultan siempre en la base de datos, así la etiqueta nunca queda desactualizada.</div>
 
-<h1>7. Registrar movimientos</h1>
-<p>Desde el detalle del producto (o tras escanear), elige:</p>
-<table>
-  <tr><th>Tipo</th><th>Qué hace</th><th>Qué se pide</th></tr>
-  <tr><td><b>Entrada</b></td><td>Aumenta el stock</td><td>Cantidad mayor que cero + motivo (compra, devolución…). Botones rápidos para el motivo.</td></tr>
-  <tr><td><b>Salida</b></td><td>Disminuye el stock</td><td>Cantidad mayor que cero + motivo (venta, daño…). La app <b>nunca permite retirar más de lo que hay</b>: verás "Stock insuficiente".</td></tr>
-  <tr><td><b>Ajuste</b></td><td>Corrige el stock tras un conteo físico</td><td>Cantidad contada + <b>justificación obligatoria</b>. El stock pasa a ser la cantidad contada.</td></tr>
-</table>
-<div class="captura">[CAPTURA: pantalla de movimiento con tipo seleccionado]</div>
-<p>Cada movimiento guarda <b>fecha y hora, responsable, stock anterior y resultante</b>. Los movimientos confirmados <b>no se pueden editar ni eliminar</b>: si te equivocas, corrige con un nuevo movimiento.</p>
+  <h1>6. Escanear códigos</h1>
+  <ol>
+    <li>Pestaña <b>Escáner</b> y apunta la cámara al código de barras o QR.</li>
+    <li>Al reconocer el código:
+      <ul>
+        <li>Si el producto <b>existe</b>: se abre su ficha con existencias y botones de entrada/salida/ajuste.</li>
+        <li>Si <b>no existe</b>: la app avisa "Producto no registrado" y ofrece <b>crear el producto</b> con el código ya escrito.</li>
+      </ul>
+    </li>
+    <li><b>Búsqueda manual:</b> si no puedes usar la cámara, escribe el código o el nombre en el campo inferior y toca la flecha.</li>
+  </ol>
+  <div class="captura">[CAPTURA: escáner con marco guía]</div>
 
-<h1>8. Alertas de stock bajo</h1>
-<p>Cuando el stock de un producto es <b>igual o menor</b> que su stock mínimo:</p>
-<ul>
-  <li>Aparece en <b>Inicio</b> en la sección de alertas.</li>
-  <li>En <b>Productos</b> puedes filtrar solo los productos en alerta.</li>
-  <li>En el <b>detalle</b> se muestra la franja naranja "Stock bajo".</li>
-</ul>
-<div class="captura">[CAPTURA: alerta de stock bajo]</div>
+  <h1>7. Registrar movimientos</h1>
+  <p>Desde el detalle del producto (o tras escanear), elige:</p>
+  <table>
+    <tr><th>Tipo</th><th>Qué hace</th><th>Qué se pide</th></tr>
+    <tr><td><b>Entrada</b></td><td>Aumenta el stock</td><td>Cantidad mayor que cero + motivo (compra, devolución…). Botones rápidos para el motivo.</td></tr>
+    <tr><td><b>Salida</b></td><td>Disminuye el stock</td><td>Cantidad mayor que cero + motivo (venta, daño…). La app <b>nunca permite retirar más de lo que hay</b>: verás "Stock insuficiente".</td></tr>
+    <tr><td><b>Ajuste</b></td><td>Corrige el stock tras un conteo físico</td><td>Cantidad contada + <b>justificación obligatoria</b>. El stock pasa a ser la cantidad contada.</td></tr>
+  </table>
+  <div class="captura">[CAPTURA: pantalla de movimiento con tipo seleccionado]</div>
+  <p>Cada movimiento guarda <b>fecha y hora, responsable, stock anterior y resultante</b>. Los movimientos confirmados <b>no se pueden editar ni eliminar</b>: si te equivocas, corrige con un nuevo movimiento.</p>
 
-<h1>9. Historial y reportes</h1>
-<p>La pestaña <b>Historial</b> muestra todos los movimientos con:</p>
-<ul>
-  <li><b>Filtros:</b> tipo (entrada/salida/ajuste), producto y rango de fechas.</li>
-  <li><b>Resumen:</b> productos activos, alertas y valor del inventario.</li>
-  <li><b>Exportar CSV</b> (íconos de descarga arriba):
-    <ul>
-      <li>Inventario completo (código, nombre, stock, precios, valor).</li>
-      <li>Movimientos filtrados (tipo, producto, cantidades, motivo, responsable, fecha).</li>
-    </ul>
-  </li>
-</ul>
-<p>El CSV se comparte como archivo: envíalo por correo o WhatsApp, o ábrelo en Excel/Google Sheets.</p>
-<div class="captura">[CAPTURA: historial con filtros aplicados]</div>
+  <h1>8. Alertas de stock bajo</h1>
+  <p>Cuando el stock de un producto es <b>igual o menor</b> que su stock mínimo:</p>
+  <ul>
+    <li>Aparece en <b>Inicio</b> en la sección de alertas.</li>
+    <li>En <b>Productos</b> puedes filtrar solo los productos en alerta.</li>
+    <li>En el <b>detalle</b> se muestra la franja naranja "Stock bajo".</li>
+  </ul>
+  <div class="captura">[CAPTURA: alerta de stock bajo]</div>
 
-<h1>10. Mensajes comunes y cómo resolverlos</h1>
-<table>
-  <tr><th>Mensaje</th><th>Qué significa</th><th>Qué hacer</th></tr>
-  <tr><td>"El código X ya está asignado a…"</td><td>Otro producto usa ese código</td><td>Usa un código diferente</td></tr>
-  <tr><td>"Stock insuficiente: solicitas N y hay M"</td><td>Intentas retirar más de lo disponible</td><td>Registra una entrada o reduce la cantidad</td></tr>
-  <tr><td>"La justificación del ajuste es obligatoria"</td><td>Ajuste sin motivo</td><td>Explica el motivo del conteo</td></tr>
-  <tr><td>"El producto está desactivado…"</td><td>El producto está inactivo</td><td>Reactívalo desde su detalle</td></tr>
-  <tr><td>"Se necesita el permiso de cámara…"</td><td>Permiso denegado</td><td>Actívalo en Ajustes → Aplicaciones → Permisos, o usa la búsqueda manual</td></tr>
-  <tr><td>"La cámara no está disponible…"</td><td>Emulador/web o sin cámara</td><td>Usa la búsqueda manual</td></tr>
-  <tr><td>"No se pudo generar la imagen de la etiqueta"</td><td>Fallo puntual al capturar</td><td>Intenta de nuevo o comparte como texto</td></tr>
-</table>
+  <h1>9. Historial y reportes</h1>
+  <p>La pestaña <b>Historial</b> muestra todos los movimientos con:</p>
+  <ul>
+    <li><b>Filtros:</b> tipo (entrada/salida/ajuste), producto y rango de fechas.</li>
+    <li><b>Resumen:</b> productos activos, alertas y valor del inventario.</li>
+    <li><b>Exportar CSV</b> (íconos de descarga arriba):
+      <ul>
+        <li>Inventario completo (código, nombre, stock, precios, valor).</li>
+        <li>Movimientos filtrados (tipo, producto, cantidades, motivo, responsable, fecha).</li>
+      </ul>
+    </li>
+  </ul>
+  <p>El CSV se comparte como archivo: envíalo por correo o WhatsApp, o ábrelo en Excel/Google Sheets.</p>
+  <div class="captura">[CAPTURA: historial con filtros aplicados]</div>
 
-<h1>11. Preguntas frecuentes</h1>
-<p><b>¿Se borran mis datos si cierro la app?</b><br>No. Todo queda guardado en el teléfono y se recarga al abrir.</p>
-<p><b>¿Puedo usar la app sin internet?</b><br>Sí, todas las funciones funcionan sin conexión.</p>
-<p><b>¿Por qué no puedo borrar un producto con historial?</b><br>Para conservar la trazabilidad del inventario se desactiva en lugar de eliminarse.</p>
-<p><b>¿Cómo corrijo un movimiento equivocado?</b><br>Registra un nuevo movimiento que lo corrija (por ejemplo, una entrada por devolución). Los movimientos confirmados son inmutables.</p>
+  <h1>10. Mensajes comunes y cómo resolverlos</h1>
+  <table>
+    <tr><th>Mensaje</th><th>Qué significa</th><th>Qué hacer</th></tr>
+    <tr><td>"El código X ya está asignado a…"</td><td>Otro producto usa ese código</td><td>Usa un código diferente</td></tr>
+    <tr><td>"Stock insuficiente: solicitas N y hay M"</td><td>Intentas retirar más de lo disponible</td><td>Registra una entrada o reduce la cantidad</td></tr>
+    <tr><td>"La justificación del ajuste es obligatoria"</td><td>Ajuste sin motivo</td><td>Explica el motivo del conteo</td></tr>
+    <tr><td>"El producto está desactivado…"</td><td>El producto está inactivo</td><td>Reactívalo desde su detalle</td></tr>
+    <tr><td>"Se necesita el permiso de cámara…"</td><td>Permiso denegado</td><td>Actívalo en Ajustes → Aplicaciones → Permisos, o usa la búsqueda manual</td></tr>
+    <tr><td>"La cámara no está disponible…"</td><td>Emulador/web o sin cámara</td><td>Usa la búsqueda manual</td></tr>
+    <tr><td>"No se pudo generar la imagen de la etiqueta"</td><td>Fallo puntual al capturar</td><td>Intenta de nuevo o comparte como texto</td></tr>
+  </table>
+
+  <h1>11. Preguntas frecuentes</h1>
+  <p><b>¿Se borran mis datos si cierro la app?</b><br>No. Todo queda guardado en el teléfono y se recarga al abrir.</p>
+  <p><b>¿Puedo usar la app sin internet?</b><br>Sí, todas las funciones funcionan sin conexión.</p>
+  <p><b>¿Por qué no puedo borrar un producto con historial?</b><br>Para conservar la trazabilidad del inventario se desactiva en lugar de eliminarse.</p>
+  <p><b>¿Cómo corrijo un movimiento equivocado?</b><br>Registra un nuevo movimiento que lo corrija (por ejemplo, una entrada por devolución). Los movimientos confirmados son inmutables.</p>
+</div>
+
+<!-- SCRIPT DE EXPORTACIÓN -->
+<script>
+  function exportarPDF() {
+    // Usar la API nativa de impresión del navegador para el mejor resultado vectorial
+    window.print();
+  }
+</script>
 
 </body>
 </html>
