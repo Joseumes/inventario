@@ -1,0 +1,15 @@
+Coloca aquí las capturas de pantalla de las pruebas (flujo de aceptación,
+alertas, escaneo, exportación CSV) y referéncialas en `docs/pruebas.md`.
+
+Sugerencia de nombres:
+- 01_creacion_producto.png
+- 02_etiquetas_code128_qr.png
+- 03_entrada_20.png
+- 04_escaneo_salida_16.png
+- 05_alerta_stock_bajo.png
+- 06_salida_rechazada.png
+- 07_ajuste_conteo.png
+- 08_historial_filtros.png
+- 09_exportar_csv.png
+- 10_datos_persisten_reinicio.png
+- 11_flutter_test_ok.png
