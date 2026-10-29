@@ -5,14 +5,12 @@
 <title>Manual de usuario — Inventario Inteligente</title>
 <!-- FontAwesome para ícono del botón -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- html2pdf.js para exportar directamente a archivo PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
 <style>
   /* Configuración para impresión nativa y guardado en PDF */
   @page { size: A4; margin: 2cm; }
-  
-  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; line-height: 1.55; max-width: 800px; margin: 0 auto; padding: 24px; position: relative; }
+
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #222; line-height: 1.55; width: 100%; max-width: 800px; margin: 0 auto; padding: 24px; position: relative; }
   h1 { color: #3F51B5; border-bottom: 3px solid #3F51B5; padding-bottom: 8px; }
   h2 { color: #3F51B5; margin-top: 28px; }
   h3 { color: #444; margin-top: 18px; }
@@ -20,7 +18,8 @@
   th, td { border: 1px solid #ccc; padding: 8px 10px; text-align: left; vertical-align: top; }
   th { background: #eef0f8; }
   code { background: #f2f2f2; padding: 1px 5px; border-radius: 4px; }
-  .captura { border: 2px dashed #b6b6d8; background: #f7f7fc; color: #666; padding: 28px; text-align: center; border-radius: 8px; margin: 10px 0; font-size: 0.9em; }
+  .captura { border: 2px dashed #b6b6d8; background: #f7f7fc; color: #666; padding: 12px; text-align: center; border-radius: 8px; margin: 10px 0; font-size: 0.9em; break-inside: avoid; page-break-inside: avoid; }
+  .captura img { display: block; width: auto; max-width: 100%; max-height: 75vh; height: auto; object-fit: contain; margin: 0 auto; }
   .nota { background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px 14px; border-radius: 4px; }
   ol li, ul li { margin-bottom: 4px; }
   .portada { text-align: center; margin-top: 120px; }
@@ -68,6 +67,15 @@
     .no-print {
       display: none !important;
     }
+    body {
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+    .captura img {
+      max-height: 220mm;
+    }
   }
 </style>
 </head>
@@ -110,7 +118,9 @@
     <li>Abre la app. Al primer uso verás datos de <b>demostración</b> (15 productos y 3 categorías) para practicar.</li>
     <li><b>Permisos:</b> al usar el escáner por primera vez, la app pedirá permiso de <b>Cámara</b>. Acepta para poder escanear. Si lo niegas, aún puedes usar la <b>búsqueda manual</b>.</li>
   </ol>
-  <div class="captura">[CAPTURA: pantalla de inicio con las 4 pestañas]</div>
+  <div class="captura">
+    <img src="../img/1.jpeg" alt="Pantalla de inicio de la aplicación">
+  </div>
 
   <h1>3. Pantalla de inicio</h1>
   <p>La pestaña <b>Inicio</b> muestra:</p>
@@ -121,7 +131,9 @@
     <li><b>Últimos movimientos</b> registrados.</li>
   </ul>
   <p>Toca la <b>silueta de persona</b> (arriba a la derecha) para poner tu <b>nombre como responsable</b>: aparecerá firmado en cada movimiento que registres.</p>
-  <div class="captura">[CAPTURA: tarjeta de perfil con el nombre del responsable]</div>
+  <div class="captura">
+    <img src="../img/2.jpeg" alt="Perfil para configurar el nombre del responsable">
+  </div>
 
   <h1>4. Gestión de productos</h1>
 
@@ -140,11 +152,15 @@
     </li>
     <li>Toca <b>Guardar</b>.</li>
   </ol>
-  <div class="captura">[CAPTURA: formulario de producto completo]</div>
+  <div class="captura">
+    <img src="../img/3.jpeg" alt="Formulario para registrar un producto">
+  </div>
 
   <h2>4.2 Buscar y filtrar</h2>
   <p>En <b>Productos</b> puedes buscar por nombre, código o descripción, y usar los filtros <b>Stock bajo</b> y <b>Mostrar inactivos</b>.</p>
-  <div class="captura">[CAPTURA: listado con filtro de stock bajo activo]</div>
+  <div class="captura">
+    <img src="../img/4.jpeg" alt="Listado de productos con el filtro de stock bajo">
+  </div>
 
   <h2>4.3 Editar</h2>
   <p>Abre el producto y toca el ícono <b>lápiz</b>. El stock actual <b>no se edita a mano</b>: se cambia únicamente con movimientos (entrada, salida o ajuste).</p>
@@ -167,7 +183,9 @@
     <li>El <b>código QR</b> con el mismo código.</li>
     <li>Botones para <b>Compartir PNG</b> (imagen lista para imprimir) y <b>Compartir texto</b>.</li>
   </ul>
-  <div class="captura">[CAPTURA: sección de etiquetas con ambos códigos]</div>
+  <div class="captura">
+    <img src="../img/5.jpeg" alt="Etiqueta de producto con código de barras y código QR">
+  </div>
   <div class="nota">El código identifica al producto. Las existencias <b>no</b> están dentro del QR: se consultan siempre en la base de datos, así la etiqueta nunca queda desactualizada.</div>
 
   <h1>6. Escanear códigos</h1>
@@ -181,7 +199,9 @@
     </li>
     <li><b>Búsqueda manual:</b> si no puedes usar la cámara, escribe el código o el nombre en el campo inferior y toca la flecha.</li>
   </ol>
-  <div class="captura">[CAPTURA: escáner con marco guía]</div>
+  <div class="captura">
+    <img src="../img/6.jpeg" alt="Pantalla para escanear códigos de productos">
+  </div>
 
   <h1>7. Registrar movimientos</h1>
   <p>Desde el detalle del producto (o tras escanear), elige:</p>
@@ -191,7 +211,9 @@
     <tr><td><b>Salida</b></td><td>Disminuye el stock</td><td>Cantidad mayor que cero + motivo (venta, daño…). La app <b>nunca permite retirar más de lo que hay</b>: verás "Stock insuficiente".</td></tr>
     <tr><td><b>Ajuste</b></td><td>Corrige el stock tras un conteo físico</td><td>Cantidad contada + <b>justificación obligatoria</b>. El stock pasa a ser la cantidad contada.</td></tr>
   </table>
-  <div class="captura">[CAPTURA: pantalla de movimiento con tipo seleccionado]</div>
+  <div class="captura">
+    <img src="../img/7.jpeg" alt="Formulario para registrar un movimiento de inventario">
+  </div>
   <p>Cada movimiento guarda <b>fecha y hora, responsable, stock anterior y resultante</b>. Los movimientos confirmados <b>no se pueden editar ni eliminar</b>: si te equivocas, corrige con un nuevo movimiento.</p>
 
   <h1>8. Alertas de stock bajo</h1>
@@ -201,7 +223,9 @@
     <li>En <b>Productos</b> puedes filtrar solo los productos en alerta.</li>
     <li>En el <b>detalle</b> se muestra la franja naranja "Stock bajo".</li>
   </ul>
-  <div class="captura">[CAPTURA: alerta de stock bajo]</div>
+  <div class="captura">
+    <img src="../img/8.jpeg" alt="Aviso de stock bajo en el detalle de un producto">
+  </div>
 
   <h1>9. Historial y reportes</h1>
   <p>La pestaña <b>Historial</b> muestra todos los movimientos con:</p>
@@ -216,7 +240,9 @@
     </li>
   </ul>
   <p>El CSV se comparte como archivo: envíalo por correo o WhatsApp, o ábrelo en Excel/Google Sheets.</p>
-  <div class="captura">[CAPTURA: historial con filtros aplicados]</div>
+  <div class="captura">
+    <img src="../img/9.jpeg" alt="Historial de movimientos con filtros aplicados">
+  </div>
 
   <h1>10. Mensajes comunes y cómo resolverlos</h1>
   <table>
