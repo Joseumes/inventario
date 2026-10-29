@@ -1,4 +1,4 @@
-# 📦 Inventario Inteligente
+# Inventario Inteligente
 
 Aplicación móvil en **Flutter** para administrar productos, generar y leer
 códigos de barras (Code 128) y códigos QR, y registrar entradas, salidas y
@@ -16,7 +16,7 @@ y mantener un historial de movimientos, **sin conexión a internet**.
 
 ---
 
-## 📑 Documentación técnica
+##  Documentación técnica
 
 Todo el sistema está documentado en archivos `.md` dentro de [`docs/`](docs/):
 
